@@ -64,7 +64,7 @@ const createListing = async (req, res) => {
   listing.owner = req.user._id;
   listing.image = { url, filename };
   listing.geometry = response.body.features[0].geometry;
-  console.log(await listing.save());
+  await listing.save();
   req.flash("success", "Listing Added Successfully");
   res.redirect("/listings");
 };
@@ -80,7 +80,6 @@ const renderEditForm = async (req, res) => {
       "/upload",
       "/upload/h_200,w_350"
     );
-    console.log(listing);
     res.render("listings/edit.ejs", { listing, originalUrl });
   }
 };
@@ -107,7 +106,6 @@ const updateListing = async (req, res) => {
   listing.geometry=response.body.features[0].geometry;
   await listing.save();  
   
-  console.log(listing);
   req.flash("success", "Updated Successfully");
   res.redirect(`/listings/${id}`);
 };
@@ -115,7 +113,6 @@ const updateListing = async (req, res) => {
 const destroyListing = async (req, res) => {
   let { id } = req.params;
   let listing = await Listing.findByIdAndDelete(id);
-  console.log(listing);
   req.flash("success", "Listing Deleted!");
   res.redirect("/listings");
 };

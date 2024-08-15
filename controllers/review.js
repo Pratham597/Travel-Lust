@@ -14,22 +14,19 @@ const createReview = async (req, res) => {
   review.author = req.user._id;
   await listing.save();
   let saveReview = await review.save();
-  console.log(saveReview);
   req.flash("success", "Review added successfully");
   res.redirect(`/listings/${id}`);
 };
 
 const destroyReview = async (req, res) => {
   let { id, reviewId } = req.params;
-  console.log(id);
   let deletedReview = await Review.findByIdAndDelete(reviewId);
-  console.log(deletedReview);
+  
   let newListing = await Listing.findByIdAndUpdate(
     id,
     { $pull: { reviews: reviewId } },
     { new: true }
   );
-  console.log(newListing);
   req.flash("success", "Review deleted!");
   res.redirect(`/listings/${id}`);
 };
